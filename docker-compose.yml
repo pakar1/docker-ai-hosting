@@ -53,8 +53,17 @@ x-init-ollama: &init-ollama
     - "sleep 3; ollama pull llama3.2"
 
 services:
+  pgvector:
+    build:
+      context: ./pgvector
+      dockerfile: Dockerfile
+    image: my-pgvector
+    profiles:
+      - build_only
+
   postgres:
-    image: postgres:16-alpine
+    image: my-pgvector
+# postgres:16-alpine
     hostname: postgres
     networks: ['demo']
     restart: unless-stopped
