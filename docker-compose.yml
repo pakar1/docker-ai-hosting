@@ -55,17 +55,12 @@ x-init-ollama: &init-ollama
     - "sleep 3; ollama pull llama3.2"
 
 services:
-  pgvector:
-    build:
-      context: ./pgvector
-      dockerfile: Dockerfile
-    image: my-pgvector
-    profiles:
-      - build_only
 
+# Postgres with pgvector
   postgres:
-    image: my-pgvector
-# postgres:16-alpine
+    build:
+       context: ./pgvector
+       dockerfile: Dockerfile
     hostname: postgres
     networks: ['demo']
     restart: unless-stopped
@@ -216,12 +211,20 @@ services:
     image: searxng/searxng
     networks: ['demo']
     ports:
-      - "8081:8080"
+      - "8888:${SEARXNG_PORT}"
     volumes:
       - searxng_config:/etc/searxng:rw
     environment:
-      - BASE_URL="http://localhost:8081/"
       - INSTANCE_NAME="my-searxng-instance"
+      - SEARXNG_DEBUG
+      - SEARXNG_PORT
+      - SEARXNG_BIND_ADDRESS
+      - SEARXNG_PUBLIC_INSTANCE
+      - SEARXNG_SECRET
+      - SEARXNG_IMAGE_PROXY
+      - SEARXNG_LIMITER
+      - SEARXNG_STATIC_USE_HASH
+      - SEARXNG_URL
     cap_drop:
       - ALL
     cap_add:
