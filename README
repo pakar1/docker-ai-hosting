@@ -8,11 +8,15 @@ $ git submodule update
 # docker
 $ docker compose pull
 
-$ docker compose build
+$ docker compose --profile gpu-amd up --force-recreate --remove-orphans -d
 
-$ docker compose up --force-recreate --remove-orphans
+$ docker compose --profile gpu-amd up -d --force-recreate
 
-$ docker compose up -d --force-recreate
+$ docker compose --profile gpu-amd up -d
 
-$ docker compose up -d
+$ docker compose --profile gpu-amd up
+
+# After docker compose the following files needs to be manually updated.
+volume: searxng_config : settings.yml - instance_name here comes double-quoted preventing searxng from starting.
+
 
