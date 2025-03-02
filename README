@@ -1,22 +1,46 @@
 
+Docker-setup for:
+- Postgres with pgvector
+- n8n
+- qdrant
+- ollama for nvidia/amd/cpu
+- Open WebUI
+- SearXNG (in progress / not tested)
+
+Todo:
+- Headless browser for scraping + n8n plugin.
+- Preinstalled n8n plugin for SearXNG
+
+
+Use wanted docker-profile for ollama : gpu-amd / gpu-nvidia / cpu
+
 
 # Init and pull git submodules
 $ git submodule init
 $ git submodule update
 
 
-# docker
+# After docker compose you need to update the following files:
+volume: searxng_config : settings.yml - instance_name here comes double-quoted preventing searxng from starting.
+
+
+
+## cheatsheet cmd's.
+
+# Update to latest docker images.
 $ docker compose pull
 
+# Force recreate and delete orphans (use with care)
 $ docker compose --profile gpu-amd up --force-recreate --remove-orphans -d
 
+# Compose and exeture with forced recreate of existing images.
 $ docker compose --profile gpu-amd up -d --force-recreate
 
+# Normal compose and execution in detached state.
 $ docker compose --profile gpu-amd up -d
 
+# Normal compose and execution with console-logs.
 $ docker compose --profile gpu-amd up
 
-# After docker compose the following files needs to be manually updated.
-volume: searxng_config : settings.yml - instance_name here comes double-quoted preventing searxng from starting.
 
 
